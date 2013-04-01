@@ -1,5 +1,5 @@
 
-import sys, argparse, csv
+import sys, argparse, csv, pprint
 import numpy as np, sklearn as skl, sklearn.feature_extraction as skl_fe
 import lcFormat
 
@@ -55,20 +55,24 @@ def normalize():
     pass
 
 def records2Arrays(records):
-    arrays = {}
-    arrays["target_names"] = np.array(lcFormat.targets)
-    arrays["target"] = np.array([lcFormat.targets.index(rec.target) for rec in records])
+    sk_records = {}
+    sk_records["target_names"] = np.array(lcFormat.targets)
+    sk_records["target"] = np.array([lcFormat.targets.index(rec.target) for rec in records])
     dv = skl_fe.DictVectorizer()
-    arrays["data"] = dv.fit_transform(records)
-    arrays["feature_names"] = dv.get_feature_names()
-    print arrays
-    return arrays
+    sk_records["data"] = dv.fit_transform(records)
+    sk_records["feature_names"] = dv.get_feature_names()
+    
+    #pp = pprint.PrettyPrinter()
+    #pp.pprint(sk_records)
+    print sk_records
+    return sk_records
 
-def main():
-    rows = readCsv(trainData)
+def preprocessData(data):
+    rows = readCsv(data)
     records = csv2Records(rows)
     records = removeIllFormed(records)
-    arrays = records2Arrays(records)
+    sk_records = records2Arrays(records)
+    return sk_records
 
 if __name__ == "__main__":
-    main()
+    preprocessData(trainData)

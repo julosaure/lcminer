@@ -4,7 +4,7 @@ import sys, string, re
 # nb of columns/features per record
 NB_COL=42
 
-# "employment length","code","initial listing status"] "fico range" "loan id" "status"
+# "employment length","code","initial listing status"] "fico range" "loan id" 
 fields = ["loan id","amount requested","amount funded by investors","interest rate","loan length","application date","application expiration date","issued date","credit grade","loan title","loan purpose","loan description","monthly payment","status","total amount funded","debt-to-income ratio","remaining principal funded by investors","payments to date (funded by investors)","remaining principal","payments to date","screen name","city","state","home ownership","monthly income","fico range","earliest credit line","open credit lines","total credit lines","revolving credit balance","revolving line utilization","inquiries in the last 6 months","accounts now delinquent","delinquent amount","delinquencies (last 2 yrs)","months since last delinquency","public records on file","months since last record","education","employment length","code","initial listing status"]
 
 f2id = dict(zip(fields, xrange(NB_COL)))
@@ -22,7 +22,7 @@ fields_str = ["loan title", "loan description", "screen name", "city", "educatio
 
 fields_categorial = ["loan length","credit grade","loan purpose","state","home ownership"] 
 
-targets = ["fully paid", "charged off", 'default', 'issued', 'current', 'performing payment plan', 'late (16-30 days)', 'late (31-120 days)', 'in review', 'in grace period']
+targets = ["fully paid", "charged off", 'default', 'issued', 'current', 'performing payment plan', 'late (16-30 days)', 'late (31-120 days)', 'in review', 'in grace period', 'loan is being issued']
 
 class lcRecord(dict):
     def __str__(self):
