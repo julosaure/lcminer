@@ -22,7 +22,7 @@ fields_str = ["loan title", "loan description", "screen name", "city", "educatio
 
 fields_categorial = ["loan length","credit grade","loan purpose","state","home ownership"] 
 
-targets = ["fully paid", "charged off", 'default', 'issued', 'current', 'performing payment plan ', 'late (16-30 days)', 'late (31-120 days)', 'in review', 'in grace period']
+targets = ["fully paid", "charged off", 'default', 'issued', 'current', 'performing payment plan', 'late (16-30 days)', 'late (31-120 days)', 'in review', 'in grace period']
 
 class lcRecord(dict):
     def __str__(self):
@@ -43,7 +43,7 @@ class lcRow2Rec():
 
         # assign class to record
         i = f2id["status"]
-        v = lcRec[i]
+        v = lcRec[i].strip()
         match = self.patPolicy.match(v)
         if match:
             lcRec.oldPolicy = True
