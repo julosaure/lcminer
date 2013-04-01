@@ -1,5 +1,5 @@
 
-import sys, string
+import sys, string, re
 
 # nb of columns/features per record
 NB_COL=42
@@ -32,7 +32,7 @@ class lcRecord(dict):
 
 class lcRow2Rec():
     def __init__(self):
-        pass
+        self.patPolicy = re.compile("^does not meet the current credit policy  status: ")
 
     def row2Rec(self, row):
         assert len(row)==NB_COL, "len(row)="+str(len(row))+" / NB_COL="+str(NB_COL)
@@ -43,7 +43,12 @@ class lcRow2Rec():
 
         # assign class to record
         i = f2id["status"]
-        lcRec.target = lcRec[i] #targets.index(lcRec[i])
+        v = lcRec[i]
+        match = self.patPolicy.match(v)
+        if match:
+            lcRec.oldPolicy = True
+            v = v[match.end():]
+        lcRec.target = v #targets.index(v)
         
         del lcRec[i]
 
