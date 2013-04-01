@@ -5,7 +5,7 @@ import lcFormat
 #----------------------------------------------------
 
 # training data file in csv format
-trainData="./data/LoanStats.h100.csv"
+trainData="./data/LoanStats.csv"
 #trainData="./data/InFunding2StatsNew (1).csv"
 
 #---------------------------------------------------
@@ -34,11 +34,18 @@ def readCsv(data):
 def csv2Records(rows):
     converter = lcFormat.lcRow2Rec()
     records = map(converter.row2Rec, rows)
+    x = {}
+    for s in records:
+        try:
+            x[s.target] += 1
+        except KeyError:
+            x[s.target] = 1
+    print x
     return records
 
 def removeIllFormed(records):
     # filter records without correct class labels
-    records = filter(lambda record: record.target in lcFormat.targets, records)
+    # records = filter(lambda record: record.target in lcFormat.targets, records)
     print "nb records well formed="+str(len(records))
     return records
 

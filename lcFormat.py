@@ -22,7 +22,7 @@ fields_str = ["loan title", "loan description", "screen name", "city", "educatio
 
 fields_categorial = ["loan length","credit grade","loan purpose","state","home ownership"] 
 
-targets = ["fully paid", "charged off"]
+targets = ["fully paid", "charged off", 'default', 'issued', 'current', 'performing payment plan ', 'late (16-30 days)', 'late (31-120 days)', 'in review', 'in grace period']
 
 class lcRecord(dict):
     def __str__(self):
@@ -36,13 +36,15 @@ class lcRow2Rec():
 
     def row2Rec(self, row):
         assert len(row)==NB_COL, "len(row)="+str(len(row))+" / NB_COL="+str(NB_COL)
+        # converts text in all fields to lower
         row = map(string.lower, row)
         # create record by mapping field ids with their value
         lcRec = lcRecord(dict(zip(xrange(NB_COL), row)))
 
         # assign class to record
         i = f2id["status"]
-        lcRec.target = targets.index(lcRec[i])
+        lcRec.target = lcRec[i] #targets.index(lcRec[i])
+        
         del lcRec[i]
 
         for f in fields_num:
@@ -63,9 +65,12 @@ class lcRow2Rec():
         for f in fields_pc:
             i = f2id[f]
             v = lcRec[i]
-            if v[-1] == "%":
-                v = v[:-1]
-            lcRec[i] = round(float(v)/100, 4)
+            if len(v) == 0:
+                del lcRec[i]
+            else:
+                if v[-1] == "%":
+                    v = v[:-1]
+                lcRec[i] = round(float(v)/100, 4)
 
         for f in fields_date:
             i = f2id[f]
@@ -78,5 +83,5 @@ class lcRow2Rec():
         for f in ["employment length","code","initial listing status", "fico range", "loan id"]:
             i = f2id[f]
             del lcRec[i]
-        print lcRec
+        #print lcRec
         return lcRec
