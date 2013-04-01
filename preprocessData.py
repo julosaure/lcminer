@@ -1,11 +1,12 @@
 
-import sys, argparse, csv, string
+import sys, argparse, csv
+import numpy as np, sklearn as skl, sklearn.feature_extraction as skl_fe
 import lcFormat
 
 #----------------------------------------------------
 
 # training data file in csv format
-trainData="./data/LoanStats.csv"
+trainData="./data/LoanStats.h100.csv"
 #trainData="./data/InFunding2StatsNew (1).csv"
 
 #---------------------------------------------------
@@ -34,6 +35,7 @@ def readCsv(data):
 def csv2Records(rows):
     converter = lcFormat.lcRow2Rec()
     records = map(converter.row2Rec, rows)
+    # distribution of classes among records
     x = {}
     for s in records:
         try:
@@ -52,13 +54,21 @@ def removeIllFormed(records):
 def normalize():
     pass
 
-def transform2Matrix():
-    pass
+def records2Arrays(records):
+    arrays = {}
+    arrays["target_names"] = np.array(lcFormat.targets)
+    arrays["target"] = np.array([lcFormat.targets.index(rec.target) for rec in records])
+    dv = skl_fe.DictVectorizer()
+    arrays["data"] = dv.fit_transform(records)
+    arrays["feature_names"] = dv.get_feature_names()
+    print arrays
+    return arrays
 
 def main():
     rows = readCsv(trainData)
     records = csv2Records(rows)
     records = removeIllFormed(records)
+    arrays = records2Arrays(records)
 
 if __name__ == "__main__":
     main()
