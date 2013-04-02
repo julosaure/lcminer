@@ -6,7 +6,8 @@ import lcFormat
 #----------------------------------------------------
 
 # training data file in csv format
-trainData="./data/LoanStats.h100.csv"
+trainDataSmall="./data/LoanStats.h100.csv"
+trainData="./data/LoanStats.h1k.csv"
 #trainData="./data/InFunding2StatsNew (1).csv"
 
 #---------------------------------------------------
